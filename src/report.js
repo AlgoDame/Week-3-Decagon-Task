@@ -18,10 +18,12 @@ async function driverReport() {
   driverIDsArray = [...new Set(driverIDsUnfiltered)]; // Filter the array to get only unique drivers
   //driverIDsArray
   let allDrivers = [];
+  let unRegisteredDriver;
   for (id of driverIDsArray) {
     // Loop through array of unique drivers
     try {
-      let driverInfo = await getDriver(id); // Get info for a particular dirver id
+      let driverInfo = await getDriver(id); // Get info for a particular driver id
+      //driverInfo
       let driverDetails = {};
       let trips = [];
       let noOfTrips = 0;
@@ -41,6 +43,7 @@ async function driverReport() {
       for (car of driverCars) {
         // Loop through array of vehicle IDs for current driver
         let carData = await getVehicle(car); // Get info for vehicle ID
+        //carData
         let carParticulars = {}; // Object to hold vehicle plate no and manufacturer
         carParticulars.plate = carData.plate;
         carParticulars.manufacturer = carData.manufacturer;
@@ -91,9 +94,12 @@ async function driverReport() {
       driverDetails.trips = trips;
 
       allDrivers.push(driverDetails);
-    } catch (error) {}
+    } catch (error) {
+      unRegisteredDriver = id;id
+      console.error(error.messge, `This ${id} is not registered.`);
+    }
   }
-  let unRegisteredDriver = driverIDsArray[driverIDsArray.length - 1];
+  // let unRegisteredDriver = driverIDsArray[driverIDsArray.length - 1];
   //console.log(typeof unRegisteredDriver)
   let unRegisteredDriverInfo = {};
   let noOfTripsUnregistered = 0;
@@ -128,10 +134,10 @@ async function driverReport() {
   unRegisteredDriverInfo.totalCashAmount = noOfCashTripsUnregistered;
   unRegisteredDriverInfo.totalNonCashAmount = billedAmount;
   allDrivers.push(unRegisteredDriverInfo);
-
+  //unRegisteredDriverInfo
   //console.log(allDrivers);
 }
 
-driverReport();
+driverReport(); 
 
 module.exports = driverReport;

@@ -71,6 +71,7 @@ async function analysis() {
       driverWithMostTrips = [trip.driverID];
     } else if (driverTrips[trip.driverID] == mostNumTrips) {
       driverWithMostTrips.push(trip.driverID);
+      
     }
   });
 
@@ -79,12 +80,14 @@ async function analysis() {
   let driverTripsArray = Object.entries(driverTrips).sort(
     (a, b) => b[1] - a[1]
   );
+  driverTripsArray
   // Driver with the highest number of trips
   let theDriverWithMostTrips = driverTripsArray[0][0];
 
   // 2nd driver with MOST trips
-  let driver2WithMostTrips = driverWithMostTrips[0];
-
+  let driver2WithMostTrips = driverWithMostTrips[0]; //an array that contains driverID & no of trips
+  
+  // Getting amount made by the 2 drivers who had most trips
   data.forEach((trip) => {
     if (trip.driverID == driver2WithMostTrips) {
       let trip2Amount = trip.billedAmount;
@@ -113,9 +116,9 @@ async function analysis() {
   }
 
   driversPromiseArr = await Promise.allSettled(driversPromiseArr);
-  driversPromiseArr;
+  //driversPromiseArr;
   for (let driver of driversPromiseArr) {
-    console.log(driver);
+    //console.log(driver);
     if (driver.value !== undefined && driver.value.vehicleID.length > 1) {
       noOfDriversWithMoreThanOneVehicle++;
     }
